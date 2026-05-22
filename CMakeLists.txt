@@ -11,6 +11,7 @@ add_library(JSBSimUnityWrapper SHARED
     wrapper_flightcontrol.cpp
     wrapper_telemetry.cpp
     wrapper_transform.cpp
+    wrapper_aircraft.cpp    
     wrapper_avionic.cpp
     wrapper_debug.cpp
 )

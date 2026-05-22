@@ -2,51 +2,44 @@
 #pragma once
 #include "wrapper_global.h"
 
-// --- Structs ---
-struct JSBSimVector3 { double x, y, z; };
-struct JSBSimQuaternion { double w, x, y, z; };
-
+#ifdef __cplusplus
 extern "C" {
+#endif
 
-#define JSB_FUNC JSB_API
+    // Position
+    JSB_API double JSBSim_GetRawNorthPositionMeters();
+    JSB_API double JSBSim_GetRawEastPositionMeters();
+    JSB_API double JSBSim_GetRawDownPositionMeters();
+    JSB_API JSBSimVector3 JSBSim_GetRawPosition();
+    JSB_API double JSBSim_GetUnityPositionX();
+    JSB_API double JSBSim_GetUnityPositionY();
+    JSB_API double JSBSim_GetUnityPositionZ();
+    JSB_API JSBSimVector3 JSBSim_GetUnityPosition();
 
-// Raw Position (NED)
-JSB_FUNC double JSBSim_GetRawNorthPositionMeters();
-JSB_FUNC double JSBSim_GetRawEastPositionMeters();
-JSB_FUNC double JSBSim_GetRawDownPositionMeters();
-JSB_FUNC JSBSimVector3 JSBSim_GetRawPosition();
+    // Velocity
+    JSB_API double JSBSim_GetRawVelocityNorthFPS();
+    JSB_API double JSBSim_GetRawVelocityEastFPS();
+    JSB_API double JSBSim_GetRawVelocityDownFPS();
+    JSB_API JSBSimVector3 JSBSim_GetRawVelocity();
+    JSB_API double JSBSim_GetUnityVelocityX();
+    JSB_API double JSBSim_GetUnityVelocityY();
+    JSB_API double JSBSim_GetUnityVelocityZ();
+    JSB_API JSBSimVector3 JSBSim_GetUnityVelocity();
 
-// Unity Position (EUN)
-JSB_FUNC double JSBSim_GetUnityPositionX();
-JSB_FUNC double JSBSim_GetUnityPositionY();
-JSB_FUNC double JSBSim_GetUnityPositionZ();
-JSB_FUNC JSBSimVector3 JSBSim_GetUnityPosition();
+    // Raw Quaternion
+    JSB_API double JSBSim_GetRawQuaternionX();
+    JSB_API double JSBSim_GetRawQuaternionY();
+    JSB_API double JSBSim_GetRawQuaternionZ();
+    JSB_API double JSBSim_GetRawQuaternionW();
+    JSB_API JSBSimQuaternion JSBSim_GetRawQuaternion();
 
-// Raw Velocity (NED)
-JSB_FUNC double JSBSim_GetRawVelocityNorthFPS();
-JSB_FUNC double JSBSim_GetRawVelocityEastFPS();
-JSB_FUNC double JSBSim_GetRawVelocityDownFPS();
-JSB_FUNC JSBSimVector3 JSBSim_GetRawVelocity();
+    // Unity Quaternion
+    JSB_API double JSBSim_GetUnityQuaternionX();
+    JSB_API double JSBSim_GetUnityQuaternionY();
+    JSB_API double JSBSim_GetUnityQuaternionZ();
+    JSB_API double JSBSim_GetUnityQuaternionW();
+    JSB_API JSBSimQuaternion JSBSim_GetUnityQuaternion();
 
-// Unity Velocity (EUN)
-JSB_FUNC double JSBSim_GetUnityVelocityX();
-JSB_FUNC double JSBSim_GetUnityVelocityY();
-JSB_FUNC double JSBSim_GetUnityVelocityZ();
-JSB_FUNC JSBSimVector3 JSBSim_GetUnityVelocity();
-
-// Raw Quaternion (NED)
-JSB_FUNC double JSBSim_GetRawQuaternionW();
-JSB_FUNC double JSBSim_GetRawQuaternionX();
-JSB_FUNC double JSBSim_GetRawQuaternionY();
-JSB_FUNC double JSBSim_GetRawQuaternionZ();
-JSB_FUNC JSBSimQuaternion JSBSim_GetRawQuaternion();
-
-// Unity Quaternion (EUN)
-JSB_FUNC double JSBSim_GetUnityQuaternionW();
-JSB_FUNC double JSBSim_GetUnityQuaternionX();
-JSB_FUNC double JSBSim_GetUnityQuaternionY();
-JSB_FUNC double JSBSim_GetUnityQuaternionZ();
-JSB_FUNC JSBSimQuaternion JSBSim_GetUnityQuaternion();
-
-#undef JSB_FUNC
+#ifdef __cplusplus
 }
+#endif

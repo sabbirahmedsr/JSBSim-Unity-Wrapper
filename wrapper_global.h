@@ -19,6 +19,10 @@ extern JSBSim::FGFDMExec* g_fdm;
 extern std::string g_dataPath, g_lastError, g_loadedAircraft;
 extern bool g_initialized, g_aircraftLoaded;
 
+// --- Structs ---
+struct JSBSimVector3 { double x, y, z; };
+struct JSBSimQuaternion { double x, y, z, w; };
+
 void JSBSim_NormalizePath(std::string& path);
 bool JSBSim_IsReady();
 double JSBSim_SafeGet(const char* property);
