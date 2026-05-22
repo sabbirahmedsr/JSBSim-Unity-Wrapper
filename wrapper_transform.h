@@ -26,19 +26,9 @@ extern "C" {
     JSB_API double JSBSim_GetUnityVelocityZ();
     JSB_API JSBSimVector3 JSBSim_GetUnityVelocity();
 
-    // Raw Quaternion
-    JSB_API double JSBSim_GetRawQuaternionX();
-    JSB_API double JSBSim_GetRawQuaternionY();
-    JSB_API double JSBSim_GetRawQuaternionZ();
-    JSB_API double JSBSim_GetRawQuaternionW();
-    JSB_API JSBSimQuaternion JSBSim_GetRawQuaternion();
-
-    // Unity Quaternion
-    JSB_API double JSBSim_GetUnityQuaternionX();
-    JSB_API double JSBSim_GetUnityQuaternionY();
-    JSB_API double JSBSim_GetUnityQuaternionZ();
-    JSB_API double JSBSim_GetUnityQuaternionW();
-    JSB_API JSBSimQuaternion JSBSim_GetUnityQuaternion();
+    // Rotation
+    JSB_API JSBSimVector3 JSBSim_GetRawEulerAngles();
+    JSB_API JSBSimVector3 JSBSim_GetUnityEulerAngles();
 
 #ifdef __cplusplus
 }

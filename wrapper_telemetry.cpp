@@ -17,7 +17,7 @@ double JSBSim_GetLongitudeDegrees()   { return JSBSim_SafeGet("position/long-gc-
 // --- Attitude ---
 double JSBSim_GetPitchDegrees()       { return JSBSim_SafeGet("attitude/theta-deg"); }
 double JSBSim_GetRollDegrees()        { return JSBSim_SafeGet("attitude/phi-deg"); }
-double JSBSim_GetHeadingDegrees()     { return JSBSim_SafeGet("attitude/heading-true-deg"); }
+double JSBSim_GetHeadingDegrees()     { return JSBSim_SafeGet("attitude/psi-deg"); }
 
 // --- Aero ---
 double JSBSim_GetAlphaDegrees()       { return JSBSim_SafeGet("aero/alpha-deg"); }
