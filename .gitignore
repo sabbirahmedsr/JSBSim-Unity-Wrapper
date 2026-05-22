@@ -1,0 +1,16 @@
+# Ignore build directories
+build/
+Build/
+bin/
+obj/
+
+# Ignore IDE files (Optional but recommended)
+.vs/
+.vscode/
+.idea/
+
+# Ignore Unity generated files (If this is inside Unity project)
+Library/
+Temp/
+Logs/
+UserSettings/
