@@ -10,13 +10,13 @@ Native JSBSim plugin for Unity.
 Open **x64 Native Tools Command Prompt for VS**:
 
 ```cmd
-cd "C:\Users\SabbirAhmedSR\Desktop\JSBSim\JSBSimUnityWrapper"
 
+cd "C:\Users\SabbirAhmedSR\Desktop\JSBSim\JSBSimUnityWrapper"
 mkdir build
 cd build
-
 cmake ..
 cmake --build . --config Release
+
 ```
 
 Generated DLL:
