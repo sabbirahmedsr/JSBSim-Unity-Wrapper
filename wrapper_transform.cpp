@@ -3,32 +3,44 @@
 
 static constexpr double F2M = 0.3048;
 
-// --- GEO Position ---
-double JSBSim_GetGEOLatitudeMeters()  { return JSBSim_SafeGet("position/distance-from-start-lat-mt"); }
-double JSBSim_GetGEOLongitudeMeters() { return JSBSim_SafeGet("position/distance-from-start-lon-mt"); }
-double JSBSim_GetGEODistanceMeters()  { return JSBSim_SafeGet("position/distance-from-start-mag-mt"); }
-JSBSimVector3 JSBSim_GetRawGEOPosition() { return { JSBSim_GetGEOLatitudeMeters(), JSBSim_GetGEOLongitudeMeters(), JSBSim_GetGEODistanceMeters() };}
-JSBSimVector3 JSBSim_GetUnityGEOPosition() { return { JSBSim_GetGEOLongitudeMeters(), 0.0, JSBSim_GetGEOLatitudeMeters() }; }
+JSB_API void JSBSim_GetTransformData(TransformData* outData) {
+    if (!outData) return;
 
-// --- NEU POSITION ---
-double JSBSim_GetNEUNorthFeet() { return JSBSim_SafeGet("position/from-start-neu-n-ft"); }
-double JSBSim_GetNEUEastFeet()  { return JSBSim_SafeGet("position/from-start-neu-e-ft"); }
-double JSBSim_GetNEUUpFeet()    { return JSBSim_SafeGet("position/from-start-neu-u-ft"); }
-JSBSimVector3 JSBSim_GetRawNEUPosition() { return { JSBSim_GetNEUNorthFeet() * F2M, JSBSim_GetNEUEastFeet() * F2M, JSBSim_GetNEUUpFeet() * F2M }; }
-JSBSimVector3 JSBSim_GetUnityNEUPosition() { return { JSBSim_GetNEUEastFeet() * F2M, JSBSim_GetNEUUpFeet() * F2M, JSBSim_GetNEUNorthFeet() * F2M }; }
+    // Fetching data from JSBSim
+    double lat = JSBSim_SafeGet("position/distance-from-start-lat-mt");
+    double lon = JSBSim_SafeGet("position/distance-from-start-lon-mt");
+    double mag = JSBSim_SafeGet("position/distance-from-start-mag-mt");
 
-// --- Velocity ---
-double JSBSim_GetRawVelocityNorthFPS()    { return JSBSim_SafeGet("velocities/v-north-fps"); }
-double JSBSim_GetRawVelocityEastFPS()     { return JSBSim_SafeGet("velocities/v-east-fps"); }
-double JSBSim_GetRawVelocityDownFPS()     { return JSBSim_SafeGet("velocities/v-down-fps"); }
-JSBSimVector3 JSBSim_GetRawVelocity()     { return { JSBSim_GetRawVelocityNorthFPS(), JSBSim_GetRawVelocityEastFPS(), JSBSim_GetRawVelocityDownFPS() }; }
+    double n   = JSBSim_SafeGet("position/from-start-neu-n-ft");
+    double e   = JSBSim_SafeGet("position/from-start-neu-e-ft");
+    double u   = JSBSim_SafeGet("position/from-start-neu-u-ft");
 
-double JSBSim_GetUnityVelocityX()         { return JSBSim_GetRawVelocityEastFPS(); }
-double JSBSim_GetUnityVelocityY()         { return -JSBSim_GetRawVelocityDownFPS(); }
-double JSBSim_GetUnityVelocityZ()         { return JSBSim_GetRawVelocityNorthFPS(); }
-JSBSimVector3 JSBSim_GetUnityVelocity()   { return { JSBSim_GetUnityVelocityX(), JSBSim_GetUnityVelocityY(), JSBSim_GetUnityVelocityZ() }; }
+    double vN  = JSBSim_SafeGet("velocities/v-north-fps");
+    double vE  = JSBSim_SafeGet("velocities/v-east-fps");
+    double vD  = JSBSim_SafeGet("velocities/v-down-fps");
 
-// --- Euler Angles ---
-JSBSimVector3 JSBSim_GetRawEulerAngles()  { return { JSBSim_GetPitchDegrees(), JSBSim_GetHeadingDegrees(), JSBSim_GetRollDegrees() }; }
-JSBSimVector3 JSBSim_GetUnityEulerAngles(){ return { -JSBSim_GetPitchDegrees(), JSBSim_GetHeadingDegrees(), -JSBSim_GetRollDegrees() }; }
+    double pitch = JSBSim_GetPitchDegrees();
+    double head  = JSBSim_GetHeadingDegrees();
+    double roll  = JSBSim_GetRollDegrees();
 
+    // Mapping with unit conversion (Double to Float)
+    outData->rawGEOPosition     = { (float)lat, (float)lon, (float)mag };
+    outData->unityGEOPosition   = { (float)lon, 0.0f, (float)lat };
+    
+    outData->rawNEUPosition     = { (float)(n * F2M), (float)(e * F2M), (float)(u * F2M) };
+    outData->unityNEUPosition   = { (float)(e * F2M), (float)(u * F2M), (float)(n * F2M) };
+    
+    outData->rawVelocityFPS     = { (float)vN, (float)vE, (float)vD };
+    outData->unityVelocityFPS   = { (float)vE, (float)(-vD), (float)vN };
+    
+    outData->rawEulerAngles     = { (float)pitch, (float)head, (float)roll };
+    outData->unityEulerAngles   = { (float)(-pitch), (float)head, (float)(-roll) };
+
+    outData->geoDistanceMeters  = (float)mag;
+    
+    // Unity speed calculation in FPS
+    float vX = outData->unityVelocityFPS.x;
+    float vY = outData->unityVelocityFPS.y;
+    float vZ = outData->unityVelocityFPS.z;
+    outData->unitySpeedFPS      = sqrtf(vX * vX + vY * vY + vZ * vZ);
+}

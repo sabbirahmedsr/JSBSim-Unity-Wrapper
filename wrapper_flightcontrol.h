@@ -1,30 +1,44 @@
 // wrapper_flightcontrol.h
 #pragma once
 #include "wrapper_global.h"
+#include <cstdint>
+
+// These structs must match the C# struct layout exactly
+struct FlightControlCommand {
+    double aileron;
+    double elevator;
+    double rudder;
+    double pitchTrim;
+    double rollTrim;
+    double yawTrim;
+    double flaps;
+    double speedBrake;
+    double noseWheelSteering;
+    double leftBrake;
+    double rightBrake;
+    int32_t parkingBrake; // 0 for false, 1 for true
+};
+
+struct FlightControlData {
+    float aileronPos;
+    float elevatorPos;
+    float rudderPos;
+    float pitchTrimPos;
+    float rollTrimPos;
+    float yawTrimPos;
+    float flapsPos;
+    float speedBrakePos;
+    float noseWheelSteeringPos;
+    float leftBrakePos;
+    float rightBrakePos;
+    int32_t parkingBrakeState; // 0 for OFF, 1 for ON
+};
 
 extern "C" {
 
 #define JSB_FUNC JSB_API
-
-// --- Primary Controls ---
-JSB_FUNC void JSBSim_SetAileron(double value);
-JSB_FUNC void JSBSim_SetElevator(double value);
-JSB_FUNC void JSBSim_SetRudder(double value);
-JSB_FUNC void JSBSim_SetElevatorTrim(double value);
-JSB_FUNC void JSBSim_SetFlaps(double value);
-JSB_FUNC void JSBSim_SetSteering(double value);
-
-// --- Brakes ---
-JSB_FUNC void JSBSim_SetParkingBrake(bool value);
-JSB_FUNC void JSBSim_SetLeftBrake(double value);
-JSB_FUNC void JSBSim_SetRightBrake(double value);
-
-// --- Get Positions ---
-JSB_FUNC double JSBSim_GetAileronPosition();
-JSB_FUNC double JSBSim_GetElevatorPosition();
-JSB_FUNC double JSBSim_GetRudderPosition();
-JSB_FUNC double JSBSim_GetFlapsPosition();
-JSB_FUNC double JSBSim_GetElevatorTrimPosition();
-
+JSB_FUNC void JSBSim_SetFlightControls(FlightControlCommand* cmd);
+JSB_FUNC void JSBSim_GetFlightControlData(FlightControlData* fcd);
 #undef JSB_FUNC
+
 }

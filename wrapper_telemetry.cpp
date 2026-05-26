@@ -1,24 +1,32 @@
 // wrapper_telemetry.cpp
+
 #include "wrapper_telemetry.h"
 
-// --- Air Data ---
-double JSBSim_GetAirspeedKTS()        { return JSBSim_SafeGet("velocities/vc-kts"); }
-double JSBSim_GetGroundSpeedKTS()     { return JSBSim_SafeGet("velocities/vg-kts"); }
-double JSBSim_GetMach()               { return JSBSim_SafeGet("velocities/mach"); }
-double JSBSim_GetVerticalSpeedFPS()   { return -JSBSim_SafeGet("velocities/v-down-fps"); }
+JSB_API void JSBSim_GetTelemetryData(TelemetryData* outData) {
+    if (!outData) return;
 
-// --- Position ---
-double JSBSim_GetAltitudeFeet()       { return JSBSim_SafeGet("position/h-sl-ft"); }
-double JSBSim_GetAltitudeMeters()     { return JSBSim_SafeGet("position/h-sl-meters"); }
-double JSBSim_GetAGLFeet()            { return JSBSim_SafeGet("position/h-agl-ft"); }
-double JSBSim_GetLatitudeDegrees()    { return JSBSim_SafeGet("position/lat-gc-deg"); }
-double JSBSim_GetLongitudeDegrees()   { return JSBSim_SafeGet("position/long-gc-deg"); }
+    // GEOGRAPHIC DATA
+    outData->latitudeDegrees    = JSBSim_SafeGet("position/lat-gc-deg");
+    outData->longitudeDegrees   = JSBSim_SafeGet("position/long-gc-deg");
+
+    // VELOCITY & AIR DATA
+    outData->airspeedKTS        = static_cast<float>(JSBSim_SafeGet("velocities/vc-kts"));
+    outData->groundSpeedKTS     = static_cast<float>(JSBSim_SafeGet("velocities/vg-kts"));
+    outData->verticalSpeedFPS   = static_cast<float>(-JSBSim_SafeGet("velocities/v-down-fps"));
+
+    // POSITION & ORIENTATION DATA
+    outData->altitudeFeet       = static_cast<float>(JSBSim_SafeGet("position/h-sl-ft"));
+    outData->altitudeMeters     = static_cast<float>(JSBSim_SafeGet("position/h-sl-meters"));
+    outData->alphaDegrees       = static_cast<float>(JSBSim_SafeGet("aero/alpha-deg"));
+    outData->betaDegrees        = static_cast<float>(JSBSim_SafeGet("aero/beta-deg"));
+
+    // ATTITUDE & HEADING
+    outData->pitchDegrees       = static_cast<float>(JSBSim_SafeGet("attitude/theta-deg"));
+    outData->rollDegrees        = static_cast<float>(JSBSim_SafeGet("attitude/phi-deg"));
+    outData->headingDegrees     = static_cast<float>(JSBSim_SafeGet("attitude/psi-deg"));
+}
 
 // --- Attitude ---
 double JSBSim_GetPitchDegrees()       { return JSBSim_SafeGet("attitude/theta-deg"); }
 double JSBSim_GetRollDegrees()        { return JSBSim_SafeGet("attitude/phi-deg"); }
 double JSBSim_GetHeadingDegrees()     { return JSBSim_SafeGet("attitude/psi-deg"); }
-
-// --- Aero ---
-double JSBSim_GetAlphaDegrees()       { return JSBSim_SafeGet("aero/alpha-deg"); }
-double JSBSim_GetBetaDegrees()        { return JSBSim_SafeGet("aero/beta-deg"); }

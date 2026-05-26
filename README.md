@@ -18,6 +18,8 @@ cd build
 cmake ..
 cmake --build . --config Release
 
+if exist "Release\JSBSimUnityWrapper.dll" (copy /Y "Release\JSBSimUnityWrapper.dll" "E:\Unity\Client Project\++BAF++\BAF Pilot Simulator JSBSim BIRP\Assets\Plugins\x86_64\" && echo --- Success: Copied ---) else (echo --- Error: DLL Not Found in Release folder ---)
+
 ```
 
 Generated DLL:

@@ -1,20 +1,30 @@
 // wrapper_setup.cpp
 #include "wrapper_setup.h"
 
-// --- Position & Orientation ---
-void JSBSim_SetInitialLatitude(double v)        { JSBSim_SafeSet("ic/lat-gc-deg", v); }
-void JSBSim_SetInitialLongitude(double v)       { JSBSim_SafeSet("ic/long-gc-deg", v); }
-void JSBSim_SetInitialAltitudeFeet(double v)    { JSBSim_SafeSet("ic/h-sl-ft", v); }
-void JSBSim_SetInitialHeadingDegrees(double v)  { JSBSim_SafeSet("ic/psi-true-deg", v); }
-void JSBSim_SetInitialPitchDegrees(double v)    { JSBSim_SafeSet("ic/theta-deg", v); }
-void JSBSim_SetInitialRollDegrees(double v)     { JSBSim_SafeSet("ic/phi-deg", v); }
+JSB_API void JSBSim_SetInitialConditions(InitialStateParameter* ic) {
+    if (!ic) return;
 
-// --- Velocity Configuration ---
-void JSBSim_SetInitialNorthVelocityFPS(double v)   { JSBSim_SafeSet("ic/v-north-fps", v); }
-void JSBSim_SetInitialEastVelocityFPS(double v)    { JSBSim_SafeSet("ic/v-east-fps", v); }
-void JSBSim_SetInitialDownVelocityFPS(double v)    { JSBSim_SafeSet("ic/v-down-fps", v); }
-void JSBSim_SetInitialForwardVelocityFPS(double v) { JSBSim_SafeSet("ic/u-fps", v); }
+    // GEOGRAPHIC & ATTITUDE
+    JSBSim_SafeSet("ic/lat-gc-deg", ic->latitudeDegrees);
+    JSBSim_SafeSet("ic/long-gc-deg", ic->longitudeDegrees);
+    JSBSim_SafeSet("ic/h-sl-ft", ic->altitudeFeet);
+    
+    JSBSim_SafeSet("ic/psi-true-deg", ic->headingDegrees);
+    JSBSim_SafeSet("ic/theta-deg", ic->pitchDegrees);
+    JSBSim_SafeSet("ic/phi-deg", ic->rollDegrees);
 
-// --- Systems State ---
-void JSBSim_SetInitialEngineRunning(bool v) { JSBSim_SafeSet("propulsion/set-running", v ? 1.0 : 0.0); }
-void JSBSim_SetInitialOnGround(bool v)      { JSBSim_SafeSet("ic/on-ground", v ? 1.0 : 0.0); }
+    // VELOCITY VECTORS
+    JSBSim_SafeSet("ic/v-north-fps", ic->northVelocityFPS);
+    JSBSim_SafeSet("ic/v-east-fps", ic->eastVelocityFPS);
+    JSBSim_SafeSet("ic/v-down-fps", ic->downVelocityFPS);
+    JSBSim_SafeSet("ic/u-fps", ic->forwardVelocityFPS);
+    JSBSim_SafeSet("ic/vt-kts", ic->airspeedKTS);
+
+    // ENGINE & SYSTEMS
+    JSBSim_SafeSet("fcs/throttle-cmd-norm", ic->throttle);
+    JSBSim_SafeSet("fcs/mixture-cmd-norm", ic->mixture); 
+       
+    // Boolean mapping to float (1.0 for true, 0.0 for false)
+    JSBSim_SafeSet("gear/parkbrake-cmd", ic->parkingBrake ? 1.0 : 0.0);
+    JSBSim_SafeSet("propulsion/set-running", ic->engineRunning ? 1.0 : 0.0);
+}
