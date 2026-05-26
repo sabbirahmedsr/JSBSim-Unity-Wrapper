@@ -1,16 +1,21 @@
 #include "wrapper_transform.h"
 #include "wrapper_telemetry.h"
 
-// --- Position ---
-double JSBSim_GetRawNorthPositionMeters() { return JSBSim_SafeGet("position/distance-from-start-lat-mt"); }
-double JSBSim_GetRawEastPositionMeters()  { return JSBSim_SafeGet("position/distance-from-start-lon-mt"); }
-double JSBSim_GetRawDownPositionMeters()  { return -JSBSim_SafeGet("position/h-sl-meters"); }
-JSBSimVector3 JSBSim_GetRawPosition()     { return { JSBSim_GetRawNorthPositionMeters(), JSBSim_GetRawEastPositionMeters(), JSBSim_GetRawDownPositionMeters() }; }
+static constexpr double F2M = 0.3048;
 
-double JSBSim_GetUnityPositionX()         { return JSBSim_GetRawEastPositionMeters(); }
-double JSBSim_GetUnityPositionY()         { return -JSBSim_GetRawDownPositionMeters(); }
-double JSBSim_GetUnityPositionZ()         { return JSBSim_GetRawNorthPositionMeters(); }
-JSBSimVector3 JSBSim_GetUnityPosition()   { return { JSBSim_GetUnityPositionX(), JSBSim_GetUnityPositionY(), JSBSim_GetUnityPositionZ() }; }
+// --- GEO Position ---
+double JSBSim_GetGEOLatitudeMeters()  { return JSBSim_SafeGet("position/distance-from-start-lat-mt"); }
+double JSBSim_GetGEOLongitudeMeters() { return JSBSim_SafeGet("position/distance-from-start-lon-mt"); }
+double JSBSim_GetGEODistanceMeters()  { return JSBSim_SafeGet("position/distance-from-start-mag-mt"); }
+JSBSimVector3 JSBSim_GetRawGEOPosition() { return { JSBSim_GetGEOLatitudeMeters(), JSBSim_GetGEOLongitudeMeters(), JSBSim_GetGEODistanceMeters() };}
+JSBSimVector3 JSBSim_GetUnityGEOPosition() { return { JSBSim_GetGEOLongitudeMeters(), 0.0, JSBSim_GetGEOLatitudeMeters() }; }
+
+// --- NEU POSITION ---
+double JSBSim_GetNEUNorthFeet() { return JSBSim_SafeGet("position/from-start-neu-n-ft"); }
+double JSBSim_GetNEUEastFeet()  { return JSBSim_SafeGet("position/from-start-neu-e-ft"); }
+double JSBSim_GetNEUUpFeet()    { return JSBSim_SafeGet("position/from-start-neu-u-ft"); }
+JSBSimVector3 JSBSim_GetRawNEUPosition() { return { JSBSim_GetNEUNorthFeet() * F2M, JSBSim_GetNEUEastFeet() * F2M, JSBSim_GetNEUUpFeet() * F2M }; }
+JSBSimVector3 JSBSim_GetUnityNEUPosition() { return { JSBSim_GetNEUEastFeet() * F2M, JSBSim_GetNEUUpFeet() * F2M, JSBSim_GetNEUNorthFeet() * F2M }; }
 
 // --- Velocity ---
 double JSBSim_GetRawVelocityNorthFPS()    { return JSBSim_SafeGet("velocities/v-north-fps"); }

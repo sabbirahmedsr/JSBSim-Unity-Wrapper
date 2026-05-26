@@ -23,6 +23,11 @@ JSB_FUNC double JSBSim_GetFuelLeftLBS();
 JSB_FUNC double JSBSim_GetFuelRightLBS();
 JSB_FUNC double JSBSim_GetOilTemperatureF();
 JSB_FUNC double JSBSim_GetEGTF();
+JSB_FUNC int    JSBSim_GetMagnetosState();
+JSB_FUNC double JSBSim_GetThrottlePosition();
+JSB_FUNC double JSBSim_GetMixturePosition();
+JSB_FUNC bool   JSBSim_GetStarterState();
+JSB_FUNC bool   JSBSim_GetOilPumpState();
 
 #undef JSB_FUNC
 }

@@ -12,6 +12,7 @@ Open **x64 Native Tools Command Prompt for VS**:
 ```cmd
 
 cd "C:\Users\SabbirAhmedSR\Desktop\JSBSim\JSBSimUnityWrapper"
+if exist build rmdir /s /q build
 mkdir build
 cd build
 cmake ..
@@ -48,41 +49,6 @@ The wrapper automatically converts vectors and Unity quaternion outputs.
 
 ---
 
-## 🔄 Quaternion Functions
-
-### Raw JSBSim Quaternion
-
-Original NED quaternion values:
-
-```cpp
-JSBSim_GetRawQuaternionW();
-JSBSim_GetRawQuaternionX();
-JSBSim_GetRawQuaternionY();
-JSBSim_GetRawQuaternionZ();
-```
-
-### Unity Quaternion
-
-Converted Unity-ready quaternion values:
-
-```cpp
-JSBSim_GetUnityQuaternionW();
-JSBSim_GetUnityQuaternionX();
-JSBSim_GetUnityQuaternionY();
-JSBSim_GetUnityQuaternionZ();
-```
-
-Current conversion:
-
-```cpp
-Unity X =  Raw Y
-Unity Y = -Raw Z
-Unity Z = -Raw X
-Unity W =  Raw W
-```
-
----
-
 ## 🚀 Initialization
 
 ```cpp
@@ -91,15 +57,6 @@ JSBSim_SetDataPath("path/to/JSBSim");
 JSBSim_LoadAircraft("c172x");
 JSBSim_RunIC();
 ```
-
----
-
-## 📏 Units
-
-- Position → Meters
-- Angles → Degrees
-- Velocity → Feet/sec
-- Airspeed → Knots
 
 ---
 

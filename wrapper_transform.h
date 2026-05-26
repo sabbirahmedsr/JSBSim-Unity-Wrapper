@@ -6,15 +6,19 @@
 extern "C" {
 #endif
 
-    // Position
-    JSB_API double JSBSim_GetRawNorthPositionMeters();
-    JSB_API double JSBSim_GetRawEastPositionMeters();
-    JSB_API double JSBSim_GetRawDownPositionMeters();
-    JSB_API JSBSimVector3 JSBSim_GetRawPosition();
-    JSB_API double JSBSim_GetUnityPositionX();
-    JSB_API double JSBSim_GetUnityPositionY();
-    JSB_API double JSBSim_GetUnityPositionZ();
-    JSB_API JSBSimVector3 JSBSim_GetUnityPosition();
+    // GEO POSITION: Delta from spawn (Meters)
+    JSB_API double JSBSim_GetGEOLatitudeMeters();
+    JSB_API double JSBSim_GetGEOLongitudeMeters();
+    JSB_API double JSBSim_GetGEODistanceMeters();
+    JSB_API JSBSimVector3 JSBSim_GetRawGEOPosition();
+    JSB_API JSBSimVector3 JSBSim_GetUnityGEOPosition();
+
+    // NEU POSITION: Local simulation (Feet)
+    JSB_API double JSBSim_GetNEUNorthFeet();
+    JSB_API double JSBSim_GetNEUEastFeet();
+    JSB_API double JSBSim_GetNEUUpFeet();
+    JSB_API JSBSimVector3 JSBSim_GetRawNEUPosition();
+    JSB_API JSBSimVector3 JSBSim_GetUnityNEUPosition();
 
     // Velocity
     JSB_API double JSBSim_GetRawVelocityNorthFPS();

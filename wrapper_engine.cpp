@@ -18,3 +18,8 @@ double JSBSim_GetFuelLeftLBS()         { return JSBSim_SafeGet("propulsion/tank[
 double JSBSim_GetFuelRightLBS()        { return JSBSim_SafeGet("propulsion/tank[1]/contents-lbs"); }
 double JSBSim_GetOilTemperatureF()     { return JSBSim_SafeGet("propulsion/engine[0]/oil-temp-degf"); }
 double JSBSim_GetEGTF()                { return JSBSim_SafeGet("propulsion/engine[0]/EGT-degf"); }
+int    JSBSim_GetMagnetosState()       { return (int)JSBSim_SafeGet("controls/engines/engine[0]/magnetos"); }
+double JSBSim_GetThrottlePosition()    { return JSBSim_SafeGet("fcs/throttle-cmd-norm"); }
+double JSBSim_GetMixturePosition()     { return JSBSim_SafeGet("fcs/mixture-cmd-norm"); }
+bool   JSBSim_GetStarterState()        { return JSBSim_SafeGet("controls/engines/engine[0]/starter") > 0.5; }
+bool   JSBSim_GetOilPumpState()        { return JSBSim_SafeGet("propulsion/engine[0]/oil-pump-state") > 0.5; }
