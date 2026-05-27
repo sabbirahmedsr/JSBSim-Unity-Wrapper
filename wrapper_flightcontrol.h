@@ -1,44 +1,33 @@
 // wrapper_flightcontrol.h
 #pragma once
 #include "wrapper_global.h"
-#include <cstdint>
+#include <cstdint> // Required for int32_t and int8_t
 
-// These structs must match the C# struct layout exactly
+// Command from Unity to JSBSim
 struct FlightControlCommand {
-    double aileron;
-    double elevator;
-    double rudder;
-    double pitchTrim;
-    double rollTrim;
-    double yawTrim;
-    double flaps;
-    double speedBrake;
-    double noseWheelSteering;
-    double leftBrake;
-    double rightBrake;
-    int32_t parkingBrake; // 0 for false, 1 for true
+    float aileron, elevator, rudder;          // Primary surfaces: -1.0 to 1.0
+    float pitchTrim, rollTrim, yawTrim;       // Trim settings
+    float flaps;                              // Flaps position: 0.0 to 1.0
+    float speedBrake;                         // Speed brake: 0.0 to 1.0
+    float noseWheelSteering;                  // Steering input: -1.0 to 1.0
+    float leftBrake, rightBrake;              // Brake pressure: 0.0 to 1.0
+    int8_t parkingBrake;                      // 1 byte: 1=ON, 0=OFF (Matches MarshalAs I1)
 };
 
+// Receives flight control status back from JSBSim
 struct FlightControlData {
-    float aileronPos;
-    float elevatorPos;
-    float rudderPos;
-    float pitchTrimPos;
-    float rollTrimPos;
-    float yawTrimPos;
-    float flapsPos;
-    float speedBrakePos;
-    float noseWheelSteeringPos;
-    float leftBrakePos;
-    float rightBrakePos;
-    int32_t parkingBrakeState; // 0 for OFF, 1 for ON
+    float aileronPos, elevatorPos, rudderPos; // Actual surface positions
+    float pitchTrimPos, rollTrimPos, yawTrimPos; 
+    float flapsPos;                           // Current flaps position
+    float speedBrakePos;                      // Current speed brake position
+    float noseWheelSteeringPos;               // Current nose wheel angle
+    float leftBrakePos, rightBrakePos;        // Actual brake engagement level
+    int8_t parkingBrakeState;                 // 1 byte: 1=ON, 0=OFF
 };
 
 extern "C" {
-
 #define JSB_FUNC JSB_API
-JSB_FUNC void JSBSim_SetFlightControls(FlightControlCommand* cmd);
+JSB_FUNC void JSBSim_ProcessFlightControlCommand(FlightControlCommand* cmd);
 JSB_FUNC void JSBSim_GetFlightControlData(FlightControlData* fcd);
 #undef JSB_FUNC
-
 }
