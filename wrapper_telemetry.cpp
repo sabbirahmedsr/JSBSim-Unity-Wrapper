@@ -24,6 +24,9 @@ JSB_API void JSBSim_GetTelemetryData(TelemetryData* outData) {
     outData->pitchDegrees       = static_cast<float>(JSBSim_SafeGet("attitude/theta-deg"));
     outData->rollDegrees        = static_cast<float>(JSBSim_SafeGet("attitude/phi-deg"));
     outData->headingDegrees     = static_cast<float>(JSBSim_SafeGet("attitude/psi-deg"));
+    
+    // PERFORMANCE & DYNAMICS
+    outData->verticalG     = static_cast<float>(JSBSim_SafeGet("accelerations/Nz"));
 }
 
 // --- Attitude ---

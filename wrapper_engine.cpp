@@ -39,8 +39,41 @@ void JSBSim_ProcessEngineCommand(EngineCommand cmd) {
         lastCmd.engineRunning = cmd.engineRunning;
     }
 }
+#include "wrapper_engine.h"
 
+void JSBSim_GetEngineSystemData(EngineData* ed) {
+    if (!ed) return;
 
+    // --- Inputs Status Mapping ---
+    ed->throttlePos = (float)JSBSim_SafeGet("fcs/throttle-cmd-norm");
+    ed->mixturePos  = (float)JSBSim_SafeGet("fcs/mixture-cmd-norm");
+    
+    // Status flags mapped to uint8_t (bool compatibility)
+    ed->isStarterActive  = (JSBSim_SafeGet("controls/engines/engine[0]/starter") > 0.5);
+    ed->isEngineRunning  = (JSBSim_SafeGet("propulsion/engine[0]/running") > 0.5);
+    ed->isPrimerActive   = (JSBSim_SafeGet("propulsion/primer-state") > 0.5);
+    ed->isFuelPumpActive = (JSBSim_SafeGet("propulsion/fuel-pump-state") > 0.5);
+
+    // States (Keeping as int32_t)
+    ed->magnetosState     = (int32_t)lastCmd.magnetos; 
+    ed->fuelSelectorState = (int32_t)JSBSim_SafeGet("propulsion/fuel_selector");
+
+    // --- Engine Performance & Health ---
+    ed->primerPumpCycles = (int32_t)JSBSim_SafeGet("propulsion/primer-cycles");
+    ed->rpm             = (float)JSBSim_SafeGet("propulsion/engine/engine-rpm");
+    ed->powerHP         = (float)JSBSim_SafeGet("propulsion/engine[0]/power-hp");
+    ed->oilTemperatureF = (float)JSBSim_SafeGet("propulsion/engine[0]/oil-temp-degf");
+    ed->oilPressurePSI  = (float)JSBSim_SafeGet("propulsion/engine[0]/oil-pressure-psi");
+    ed->egtF            = (float)JSBSim_SafeGet("propulsion/engine[0]/EGT-degf");
+
+    // --- Fuel System ---
+    ed->fuelFlowGPH    = (float)JSBSim_SafeGet("propulsion/engine[0]/fuel-flow-gph");
+    ed->totalFuelLBS   = (float)JSBSim_SafeGet("propulsion/total-fuel-lbs");
+    ed->leftFuelLBS    = (float)JSBSim_SafeGet("propulsion/tank[0]/contents-lbs");
+    ed->rightFuelLBS   = (float)JSBSim_SafeGet("propulsion/tank[1]/contents-lbs");
+}
+
+/*
 // Retrieves all engine performance, status, and fuel data in one call.
 void JSBSim_GetEngineSystemData(EngineData* ed) {
     if (!ed) return;
@@ -68,29 +101,4 @@ void JSBSim_GetEngineSystemData(EngineData* ed) {
     ed->leftFuelLBS = (float)JSBSim_SafeGet("propulsion/tank[0]/contents-lbs");
     ed->rightFuelLBS = (float)JSBSim_SafeGet("propulsion/tank[1]/contents-lbs");
 }
-
-
-/*
-// --- Engine Controls ---
-void JSBSim_SetThrottle(double v)      { JSBSim_SafeSet("fcs/throttle-cmd-norm", JSB_Clamp(v, 0.0, 1.0)); }
-void JSBSim_SetMixture(double v)       { JSBSim_SafeSet("fcs/mixture-cmd-norm", JSB_Clamp(v, 0.0, 1.0)); }
-void JSBSim_SetStarter(bool v)         { JSBSim_SafeSet("propulsion/starter_cmd", v ? 1.0 : 0.0); }
-void JSBSim_SetMagnetos(int v)         { JSBSim_SafeSet("propulsion/magneto_cmd", (double)v); }
-void JSBSim_SetFuelSelector(int v)     { JSBSim_SafeSet("propulsion/fuel_selector", (double)v); }
-void JSBSim_SetEngineRunning(bool v)   { JSBSim_SafeSet("propulsion/set-running", v ? 1.0 : 0.0); }
-
-// --- Engine Data ---
-bool   JSBSim_GetEngineRunning()       { return JSBSim_SafeGet("propulsion/engine[0]/running") > 0.5; }
-double JSBSim_GetRPM()                 { return JSBSim_SafeGet("propulsion/engine[0]/rpm"); }
-double JSBSim_GetEnginePowerHP()       { return JSBSim_SafeGet("propulsion/engine[0]/power-hp"); }
-double JSBSim_GetFuelTotalLBS()        { return JSBSim_SafeGet("propulsion/total-fuel-lbs"); }
-double JSBSim_GetFuelLeftLBS()         { return JSBSim_SafeGet("propulsion/tank[0]/contents-lbs"); }
-double JSBSim_GetFuelRightLBS()        { return JSBSim_SafeGet("propulsion/tank[1]/contents-lbs"); }
-double JSBSim_GetOilTemperatureF()     { return JSBSim_SafeGet("propulsion/engine[0]/oil-temp-degf"); }
-double JSBSim_GetEGTF()                { return JSBSim_SafeGet("propulsion/engine[0]/EGT-degf"); }
-int    JSBSim_GetMagnetosState()       { return (int)JSBSim_SafeGet("controls/engines/engine[0]/magnetos"); }
-double JSBSim_GetThrottlePosition()    { return JSBSim_SafeGet("fcs/throttle-cmd-norm"); }
-double JSBSim_GetMixturePosition()     { return JSBSim_SafeGet("fcs/mixture-cmd-norm"); }
-bool   JSBSim_GetStarterState()        { return JSBSim_SafeGet("controls/engines/engine[0]/starter") > 0.5; }
-bool   JSBSim_GetOilPumpState()        { return JSBSim_SafeGet("propulsion/engine[0]/oil-pump-state") > 0.5; }
 */

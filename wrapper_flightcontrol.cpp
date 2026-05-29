@@ -47,7 +47,7 @@ void JSBSim_ProcessFlightControlCommand(FlightControlCommand* cmd) {
 void JSBSim_GetFlightControlData(FlightControlData* fcd) {
     if (!fcd) return;
 
-    fcd->aileronPos = (float)JSBSim_SafeGet("fcs/aileron-pos-norm");
+    fcd->aileronPos = (float)JSBSim_SafeGet("fcs/left-aileron-pos-norm");
     fcd->elevatorPos = (float)JSBSim_SafeGet("fcs/elevator-pos-norm");
     fcd->rudderPos = (float)JSBSim_SafeGet("fcs/rudder-pos-norm");
     

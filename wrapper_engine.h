@@ -14,40 +14,37 @@ struct EngineCommand {
     int8_t engineRunning;     // 1 byte: 1=START, 0=STOP
 };
 
-// Receives all engine status, performance, and fuel data back from JSBSim.
+// Status, performance, and fuel telemetry data from JSBSim
 struct EngineData {
-    // Inputs (Actual positions in simulation)
-    float throttlePos;          // Current throttle lever position.
-    float mixturePos;           // Current mixture lever position.
-    int32_t starterState;       // 1 if starter is active.
-    int32_t magnetosState;      // Current ignition switch position.
-    int32_t fuelSelectorState;  // Currently selected fuel tank.
-    int32_t engineRunning;      // 1 if the engine is running.
-    int32_t primerState;        // 1 if primer is active.
-    int32_t fuelPumpState;      // 1 if fuel pump is active.
-    
-    // Performance Data
-    int32_t primerPumpCycles;   // Count of primer pushes.
-    float rpm;                  // Current engine speed.
-    float powerHP;              // Power output in Horsepower.
-    float oilTemperatureF;      // Oil temperature in Fahrenheit.
-    float egtF;                 // Exhaust Gas Temperature in Fahrenheit.
-    
-    // Fuel System
-    float totalFuelLBS;         // Total fuel weight in pounds.
-    float leftFuelLBS;          // Fuel in left tank in pounds.
-    float rightFuelLBS;         // Fuel in right tank in pounds.
+    // --- Actual positions in the simulation ---
+    float throttlePos;        // Current throttle lever position (0.0 to 1.0)
+    float mixturePos;         // Current mixture lever position (0.0 to 1.0)
+
+    // --- Status flags (Using uint8_t for 1-byte boolean compatibility) ---
+    uint8_t isStarterActive;   // True if starter is engaged
+    int32_t magnetosState;     // Magneto switch (0=OFF, 1=R, 2=L, 3=BOTH)
+    int32_t fuelSelectorState; // Currently selected fuel tank index
+    uint8_t isEngineRunning;   // True if the engine is running
+    uint8_t isPrimerActive;    // True if primer is active
+    uint8_t isFuelPumpActive;  // True if fuel pump is active
+
+    // --- Engine Performance & Health ---
+    int32_t primerPumpCycles;  // Total count of primer pulses
+    float rpm;                 // Engine speed in Revolutions Per Minute
+    float powerHP;             // Power output in Horsepower
+    float oilTemperatureF;     // Oil temperature in Fahrenheit
+    float oilPressurePSI;      // Oil pressure in PSI
+    float egtF;                // Exhaust Gas Temperature in Fahrenheit
+
+    // --- Fuel System ---
+    float fuelFlowGPH;         // Fuel consumption rate in Gallons Per Hour
+    float totalFuelLBS;        // Total fuel weight in Pounds
+    float leftFuelLBS;         // Fuel weight in left tank in Pounds
+    float rightFuelLBS;        // Fuel weight in right tank in Pounds
 };
 
 extern "C" {
 #define JSB_FUNC JSB_API
-/*
-JSB_FUNC void JSBSim_SetThrottle(double value);
-JSB_FUNC void JSBSim_SetMixture(double value);
-JSB_FUNC void JSBSim_SetStarter(bool value);
-JSB_FUNC void JSBSim_SetMagnetos(int value);
-JSB_FUNC void JSBSim_SetFuelSelector(int value);
-JSB_FUNC void JSBSim_SetEngineRunning(bool value);*/
 JSB_FUNC void JSBSim_ProcessEngineCommand(EngineCommand cmd);
 JSB_FUNC void JSBSim_GetEngineSystemData(EngineData* ed);
 #undef JSB_FUNC

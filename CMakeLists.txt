@@ -8,11 +8,12 @@ add_library(JSBSimUnityWrapper SHARED
     wrapper_core.cpp
     wrapper_setup.cpp
     wrapper_engine.cpp
+    wrapper_electrical.cpp
     wrapper_flightcontrol.cpp
+    wrapper_landinggear.cpp
     wrapper_telemetry.cpp
-    wrapper_transform.cpp
-    wrapper_aircraft.cpp    
-    wrapper_avionic.cpp
+    wrapper_transform.cpp     
+    wrapper_miscellaneous.cpp
     wrapper_debug.cpp
 )
 
